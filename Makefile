@@ -1,8 +1,5 @@
 hello: main.m
-	clang -fobjc-arc -F . -framework Foundation -framework Lagrangian -o hello -DDEBUG=1 main.m
-
-test: hello
-	DYLD_FRAMEWORK_PATH=. ./lagrangian-test-runner -command hello
+	clang -fobjc-arc -framework Foundation -o hello main.m
 
 clean:
 	rm hello
