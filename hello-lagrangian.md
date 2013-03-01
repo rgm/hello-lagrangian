@@ -1,4 +1,4 @@
-# Hello, Lagrangian
+# Hello, Lagrangian.
 
 You should be testing your code. As should you be flossing. [Rob
 Rix](https://twitter.com/robrix) is seeking to give you one less excuse on the
@@ -25,7 +25,7 @@ we'll follow from the shell:
 
 1. Clone the github project and build the executable.
 2. Add inline tests.
-3. Add Lagrangian framework.
+3. Add L3 framework.
 4. Show a test failure.
 5. Get to green.
 
@@ -68,7 +68,8 @@ You'll need to define at least (a) a single *suite*, and (b) a single *test* wit
 that suite. These are defined at the top. You'll also need to add (c) a hook for
 the test runner within the top-level autorelease pool.
 
-For religious reasons, of course, the test we've added must first fail, then we'll fix it.
+For religious reasons, of course, the test we've added must first fail, then
+we'll fix it.
 
     #import <Foundation/Foundation.h>
 
@@ -88,11 +89,11 @@ For religious reasons, of course, the test we've added must first fail, then we'
 
 As it stands, of course, we've broken `make`. Let's fix it.
 
-## 3. Add Lagrangian framework.
+## 3. Add L3 framework.
 
 We need to tell the compiler about `@l3_suite()`, `@l3_test()` and `l3_main()`
-syntax by including a header file, and linking against the Lagrangian library.
-It can currently be built as an iOS static framework, OS X dylib or OS X framework. I
+syntax by including a header file, and linking against the L3 library.  It can
+currently be built as an iOS static framework, OS X dylib or OS X framework. I
 prefer the OS X framework for our purposes: it includes the headers and it's
 easy for the compiler to find them.
 
@@ -100,9 +101,8 @@ Add this line to `main.m` below the Foundation include:
 
     #import <Lagrangian/Lagrangian.h>
 
-You can either build your own framework from the Lagrangian
-[source][lagrangian] and copy it into the project folder, or pull a prebuilt
-one from the project repo:
+You can either build your own framework from the L3 [source][lagrangian] and
+copy it into the project folder, or pull a prebuilt one from the project repo:
 
     $ curl -O https://github.com/rgm/hello-lagrangian/raw/master/Lagrangian.tgz && tar zxf Lagrangian.tgz
 
@@ -111,7 +111,8 @@ Edit the executable target in `Makefile` to add the framework and enable DEBUG:
     hello: main.m
       clang -fobjc-arc -F . -framework Foundation -framework Lagrangian -DDEBUG=1 -o hello main.m
 
-Now make and run the executable. If all went well, you should see the same output as step 1.
+Now make and run the executable. If all went well, you should see the same
+output as step 1.
 
 We haven't actually run the tests yet. But, because we set the DEBUG flag,
 they're in the executable, lying in wait.
@@ -122,13 +123,15 @@ To see test results, we'll run our executable within the test runner. Things
 are a little different when your app is a full Cocoa app (ie. passes off to
 `NSApplicationMain()`), and hopefully a future tutorial will show that. 
 
-Like the library, you can either build the test runner from the Lagrangian
+Like the library, you can either build the test runner from the L3
 [source][lagrangian] and copy it into the project folder, or pull a prebuilt
 one from the project repo:
 
     $ curl -O https://github.com/rgm/hello-lagrangian/raw/master/lagrangian-test-runner.tgz && tar zxf lagrangian-test-runner.tgz
 
-Add a test target to `Makefile`. This tells the test runner where to find the Lagrangian library and executes it, passing it the command-line invocation needed to run our executable:
+Add a test target to `Makefile`. This tells the test runner where to find the
+L3 library and executes it, passing it the command-line invocation needed to
+run our executable:
 
     test: hello
       DYLD_FRAMEWORK_PATH=. ./lagrangian-test-runner -command hello
@@ -187,10 +190,10 @@ completed one full TDD cycle using Lagrangian.
 
 ---
 
-I hope this has piqued your interest to learn more. As of this writing,
-Lagrangian is barely four months old yet it's already achieved that
-test-framework tail-swallowing trick, and so the best place for learning more
-about using Lagrangian is to look over the extensive tests in its own source.
+I hope this has piqued your interest to learn more. As of this writing, L3 is
+barely four months old yet it's already achieved that neat test-framework
+tail-swallowing trick, and so the best place for learning more about using L3
+is to look over the extensive tests in its own [source][lagrangian].
 
 [hello]: https://github.com/rgm/hello-lagrangian
 [lagrangian]: https://github.com/robrix/lagrangian
@@ -201,13 +204,12 @@ that's mainly to trick Xcode's test machinery. This project won't have one.
 [^1]: Note that you wouldn't normally do all this at the shell. I'm reducing
 the number of moving parts for learning purposes. Lagrangian has extensive
 Xcode integration, and Rob is performing yeoman's work in keeping it working.
-Frustrating evidence suggests that Apple may not rely on its own unit-testing
-tools as much as one would hope.
+Frustrating and mounting evidence suggests that Apple may not rely on its own
+unit-testing tools as much as one would hope.
 
 [^2]: You could make this work with older versions of OS X or even Linux /
-GNUStep. For convenience, The demonstration project contains binaries built
-against 10.8 using Xcode 4.6. You could build your own. The real prerequisite
-is a relatively recent version of clang, since Lagrangian makes heavy use of
-blocks and ARC.
+GNUStep. For convenience, the project uses binaries pre-built against 10.8
+using Xcode 4.6. You could build your own. The real prerequisite is a
+relatively recent version of `clang`, since L3 makes heavy use of blocks and ARC.
 
 [^4]: `git checkout master` 
